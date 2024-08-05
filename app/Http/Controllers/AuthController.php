@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $request->validate([
-            'login' => 'required|string'
-        ]);
-
         if (User::whereLogin($request->login)->first() !== null) {
             return response()->json([
                 'message' => 'Вы уже зарегистрированы',
@@ -30,12 +26,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $request->validate([
-            'login' => 'required|string'
-        ]);
-
         $user = User::whereLogin($request->login)->first();
 
         if (!$user) {
@@ -47,4 +39,3 @@ class AuthController extends Controller
         ]);
     }
 }
-

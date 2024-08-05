@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePaymentRequest;
+use App\Http\Requests\UpdatePaymentStatusRequest;
+use App\Http\Requests\SearchPaymentRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Models\Payment;
-use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
     /**
      * Получение списка платежей с пагинацией и поиском
      */
-    public function index(Request $request): JsonResponse
+    public function index(SearchPaymentRequest $request): JsonResponse
     {
         $query = Payment::query();
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('id', 'like', "%$search%")
@@ -32,50 +33,19 @@ class PaymentController extends Controller
     }
 
     /**
-     * Cоздание нового платежа
+     * Создание нового платежа
      */
-    public function store(Request $request): JsonResponse
+    public function store(StorePaymentRequest $request): JsonResponse
     {
-        $messages = [
-            'login.exists' => 'Пользователь не найден.',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|string|unique:payments',
-            'login' => 'required|string|exists:users,login',
-            'details' => 'required|string',
-            'amount' => 'required|numeric',
-            'currency' => 'required|string',
-            'status' => 'required|in:CREATED,PAID',
-        ], $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $payment = Payment::create($request->all());
+        $payment = Payment::create($request->validated());
         return response()->json($payment, 201);
     }
 
     /**
      * Обновить статус платежа
      */
-    public function updateStatus(Request $request): JsonResponse
+    public function updateStatus(UpdatePaymentStatusRequest $request): JsonResponse
     {
-        $messages = [
-            'id.exists' => 'Пользователь не найден.',
-            'status.in' => 'Передан некорректный статус',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|string|exists:payments,id',
-            'status' => 'required|in:CREATED,PAID',
-        ], $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         $payment = Payment::find($request->input('id'));
         $payment->status = $request->input('status');
         $payment->save();
