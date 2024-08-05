@@ -11,7 +11,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => 'required|string|exists:users,login'
+            'login' => 'required|string|exists:users,login',
+            'password' => 'required|string'
         ];
     }
 
@@ -19,6 +20,8 @@ class LoginRequest extends FormRequest
     {
         return [
             'login.exists' => 'Пользователь не найден.',
+            'login.required' => 'Введите логин.',
+            'password.required' => 'Введите пароль.',
         ];
     }
 

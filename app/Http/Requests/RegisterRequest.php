@@ -11,7 +11,18 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => 'required|string'
+            'login' => 'required|string|unique:users',
+            'password' => 'required|string|min:8',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'login.unique' => 'Логин занят.',
+            'login.required' => 'Введите логин.',
+            'password.required' => 'Введите пароль.',
+            'password.min' => 'Длина пароля должна быть не менее 8 символов.',
         ];
     }
 

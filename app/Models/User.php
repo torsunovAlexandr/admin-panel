@@ -37,11 +37,22 @@ class User extends Model
 
     protected $fillable = [
         'login',
-        'balance'
+        'password',
+        'balance',
     ];
+
+    protected $hidden = [
+        'password',
+    ];
+
 
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class, 'login', 'login');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 }
