@@ -6,6 +6,10 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property string $login
+ * @property string $password
+ */
 class RegisterRequest extends FormRequest
 {
     public function rules(): array

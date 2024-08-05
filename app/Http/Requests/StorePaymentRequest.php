@@ -6,6 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property string $id
+ * @property string $login
+ * @property string $details
+ * @property float $amount
+ * @property string $currency
+ * @property string $status
+ */
 class StorePaymentRequest extends FormRequest
 {
     public function rules(): array

@@ -6,13 +6,17 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property string $id
+ * @property string $status
+ */
 class UpdatePaymentStatusRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'id' => 'required|string|exists:payments,id',
-            'status' => 'required|in:CREATED,PAID',
+            'status' => 'required|string|in:CREATED,PAID',
         ];
     }
 

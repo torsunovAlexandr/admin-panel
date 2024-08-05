@@ -6,6 +6,10 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property string $search
+ * @property integer $per_page
+ */
 class SearchPaymentRequest extends FormRequest
 {
     public function rules(): array
